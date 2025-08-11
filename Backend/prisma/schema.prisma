@@ -1,0 +1,169 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  MAIN_ADMIN
+  STALL_ADMIN
+  CUSTOMER
+  COURIER
+  FARMER
+  RETAILER
+}
+
+enum ProductStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  DISPATCHED
+  IN_TRANSIT
+  DELIVERED
+  CANCELLED
+}
+
+model User {
+  id       String @id @default(uuid()) @db.Uuid
+  name     String
+  email    String @unique
+  password String
+  role     Role   @default(CUSTOMER)
+
+  stalls            Stall[]    @relation("StallOwner")
+  orders            Order[]    @relation("CustomerOrders")
+  courierDeliveries Delivery[] @relation("CourierDeliveries")
+  farmerProducts    Product[]  @relation("FarmerProducts")
+  createdProducts   Product[]  @relation("CreatedProducts")
+  carts             Cart[]
+
+  createdAt DateTime @default(now())
+}
+
+model Stall {
+  id       String  @id @default(uuid()) @db.Uuid
+  name     String
+  location String?
+
+  owner   User   @relation("StallOwner", fields: [ownerId], references: [id])
+  ownerId String @db.Uuid
+
+  products Product[]
+  orders   Order[]   @relation("StallOrders")
+
+  createdAt DateTime @default(now())
+}
+
+model Product {
+  id          String        @id @default(uuid()) @db.Uuid
+  name        String
+  description String?
+  price       Float
+  quantity    Int
+  isWholesale Boolean       @default(false)
+  status      ProductStatus @default(PENDING)
+
+  farmer   User?   @relation("FarmerProducts", fields: [farmerId], references: [id])
+  farmerId String? @db.Uuid
+
+  stall   Stall?  @relation(fields: [stallId], references: [id])
+  stallId String? @db.Uuid
+
+  createdBy   User   @relation("CreatedProducts", fields: [createdById], references: [id])
+  createdById String @db.Uuid
+
+  images     ProductImage[]
+  orderItems OrderItem[]
+  cartItems  CartItem[]
+
+  createdAt DateTime @default(now())
+}
+
+model ProductImage {
+  id        String  @id @default(uuid()) @db.Uuid
+  url       String
+  product   Product @relation(fields: [productId], references: [id])
+  productId String  @db.Uuid
+}
+
+model Cart {
+  id         String @id @default(uuid()) @db.Uuid
+  customer   User   @relation(fields: [customerId], references: [id])
+  customerId String @db.Uuid
+
+  items     CartItem[]
+  createdAt DateTime   @default(now())
+}
+
+model CartItem {
+  id     String @id @default(uuid()) @db.Uuid
+  cart   Cart   @relation(fields: [cartId], references: [id])
+  cartId String @db.Uuid
+
+  product   Product @relation(fields: [productId], references: [id])
+  productId String  @db.Uuid
+
+  quantity Int
+}
+
+model Order {
+  id         String @id @default(uuid()) @db.Uuid
+  customer   User   @relation("CustomerOrders", fields: [customerId], references: [id])
+  customerId String @db.Uuid
+
+  stall   Stall  @relation("StallOrders", fields: [stallId], references: [id])
+  stallId String @db.Uuid
+
+  items      OrderItem[]
+  status     OrderStatus @default(PENDING)
+  deliveries Delivery[]
+
+  payment   Payment?
+  createdAt DateTime @default(now())
+}
+
+model OrderItem {
+  id      String @id @default(uuid()) @db.Uuid
+  order   Order  @relation(fields: [orderId], references: [id])
+  orderId String @db.Uuid
+
+  product   Product @relation(fields: [productId], references: [id])
+  productId String  @db.Uuid
+
+  quantity Int
+  price    Float
+}
+
+model Delivery {
+  id      String @id @default(uuid()) @db.Uuid
+  order   Order  @relation(fields: [orderId], references: [id])
+  orderId String @db.Uuid
+
+  courier   User?   @relation("CourierDeliveries", fields: [courierId], references: [id])
+  courierId String? @db.Uuid
+
+  trackingCode String
+  status       OrderStatus @default(IN_TRANSIT)
+  updatedAt    DateTime    @updatedAt
+}
+
+model Payment {
+  id      String @id @default(uuid()) @db.Uuid
+  order   Order  @relation(fields: [orderId], references: [id])
+  orderId String @unique @db.Uuid
+
+  method        String
+  transactionId String?
+  amount        Float
+  status        String
+  createdAt     DateTime @default(now())
+}
