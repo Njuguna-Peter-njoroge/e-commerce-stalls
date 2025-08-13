@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "public"."Role" AS ENUM ('MAIN_ADMIN', 'STALL_ADMIN', 'CUSTOMER', 'COURIER', 'FARMER', 'RETAILER');
+CREATE TYPE "public"."Role" AS ENUM ('MAIN-ADMIN', 'STALL-ADMIN', 'CUSTOMER', 'COURIER', 'FARMER', 'RETAILER');
 
 -- CreateEnum
 CREATE TYPE "public"."ProductStatus" AS ENUM ('PENDING', 'APPROVED', 'REJECTED');
@@ -14,6 +14,8 @@ CREATE TABLE "public"."User" (
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "role" "public"."Role" NOT NULL DEFAULT 'CUSTOMER',
+    "isVerified" BOOLEAN NOT NULL DEFAULT false,
+    "verificationToken" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")

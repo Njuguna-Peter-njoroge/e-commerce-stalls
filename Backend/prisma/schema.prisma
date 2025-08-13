@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  // output   = "../generated/prisma"
 }
 
 datasource db {
@@ -9,12 +9,12 @@ datasource db {
 }
 
 enum Role {
-  MAIN_ADMIN
-  STALL_ADMIN
-  CUSTOMER
-  COURIER
-  FARMER
-  RETAILER
+  MAIN_ADMIN  @map("MAIN_ADMIN")
+  STALL_ADMIN @map("STALL_ADMIN")
+  CUSTOMER    @map("CUSTOMER")
+  COURIER     @map("COURIER")
+  FARMER      @map("FARMER")
+  RETAILER    @map("RETAILER")
 }
 
 enum ProductStatus {
@@ -33,11 +33,13 @@ enum OrderStatus {
 }
 
 model User {
-  id       String @id @default(uuid()) @db.Uuid
-  name     String
-  email    String @unique
-  password String
-  role     Role   @default(CUSTOMER)
+  id                String  @id @default(uuid()) @db.Uuid
+  name              String
+  email             String  @unique
+  password          String
+  role              Role    @default(CUSTOMER)
+  isVerified        Boolean @default(false)
+  verificationToken String?
 
   stalls            Stall[]    @relation("StallOwner")
   orders            Order[]    @relation("CustomerOrders")
