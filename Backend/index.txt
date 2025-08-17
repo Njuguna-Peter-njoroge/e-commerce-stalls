@@ -1,0 +1,59 @@
+Since you’ve finished users, the next logical module in your schema is Stalls, because:
+
+Product depends on Stall (each product can belong to a stall).
+
+Order also depends on Stall (stall receives orders).
+
+You already have Role.MAIN_ADMIN and Role.STALL_ADMIN, which can be enforced in stall creation & management.
+
+Recommended Order for Building Modules
+Auth / Users ✅ (done)
+
+Stalls → so stall admins can manage their stalls.
+
+Products → linked to stalls and/or farmers.
+
+Cart & CartItems → customers can add products.
+
+Orders & OrderItems → orders are created from carts.
+
+Deliveries → couriers assigned to orders.
+
+Payments → linked to orders.
+
+Recommended Build Sequence
+Implement Product CRUD
+
+Create product
+
+Update product
+
+Delete product
+
+List products
+
+Upload product images
+
+Manage stock/quantity
+
+Implement Cart + CartItem
+
+Create a cart for a user (or fetch existing)
+
+Add products to cart
+
+Update quantity
+
+Remove from cart
+
+View cart
+
+Implement Order + OrderItem
+
+Checkout from cart
+
+Create order & order items
+
+Handle stock deduction
+
+Add payment & delivery steps

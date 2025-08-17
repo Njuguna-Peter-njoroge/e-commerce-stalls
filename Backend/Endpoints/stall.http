@@ -1,0 +1,41 @@
+
+@baseUrl = http://localhost:3000
+
+@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzZTc0NzkzMy1hZDk0LTRkZmYtYjkxMy01YmQ5MDc5MTdhNWQiLCJlbWFpbCI6Im5qdWd1bmFocGV0ZXJuam9yb2dlQGdtYWlsLmNvbSIsInJvbGUiOiJNQUlOX0FETUlOIiwiaWF0IjoxNzU1MDY0MTMyLCJleHAiOjE3NTU2Njg5MzJ9.xDkkK6jq76abQ5wxxx6lonzQ-zzGmfyGA_N6-fDnECo
+
+####create stall
+POST {{baseUrl}}/stall
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "name": "central enterprises",
+  "location": "Nakuru",
+  "ownerId": "642129f8-aa82-4f97-a2de-b6522126fbed"
+
+}
+
+###findAll
+GET http://localhost:3000/stall
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+###findOne
+GET http://localhost:3000/stall/04c02986-10fb-4ce6-9140-17dece693542
+Content-Type: application/json
+
+### Update a Stall (MAIN_ADMIN or STALL_ADMIN only)
+PATCH http://localhost:3000/stall/04c02986-10fb-4ce6-9140-17dece693542
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "name": "Fresh Fruits and Vegetables",
+  "location": "Central Market",
+  "description": "Now with vegetables!"
+}
+
+
+### Delete a Stall (MAIN_ADMIN or STALL_ADMIN only)
+GET http://localhost:3000/stall/54c5380e-49bb-475b-b353-deee4acb002a/delete
+Authorization: Bearer {{access_token}}

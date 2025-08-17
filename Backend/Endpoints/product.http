@@ -1,0 +1,18 @@
+@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxZTIyM2UyOC01Y2U0LTQxNjgtOTE4Yy0wZjQwZWRjMDc3Y2IiLCJlbWFpbCI6ImpvaG5icmlhbjI0dkBnbWFpbC5jb20iLCJyb2xlIjoiTUFJTl9BRE1JTiIsImlhdCI6MTc1NTQyMzY1NSwiZXhwIjoxNzU2MDI4NDU1fQ._9mTK4Ohwnz95P999eex1ps3aHunor8Ix04pqpRj8qs
+
+
+
+### Create a product (without image upload)
+POST http://localhost:3000/products/create-product
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "name": "Fresh Tomatoes",
+  "description": "Organic tomatoes from local farm",
+  "price": 200,
+  "quantity": 50,
+  "isWholesale": false,
+  "stallId": "stall_123",
+  "farmerId": "farmer_456"
+}

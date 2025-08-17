@@ -8,11 +8,12 @@ Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 {
-  "email": "peterjuniordev@gmail.com",
-  "password":"user123",
-  "name": "peter",
-  "role": "CUSTOMER"
+  "email": "johnbrian24v@gmail.com",
+  "password":"ADMIN123",
+  "name": "ADMIN",
+  "role": "MAIN_ADMIN"
 }
+
 
 ### CREATE USER (Regular user)
 POST {{baseUrl}}/users
@@ -57,7 +58,7 @@ POST {{baseUrl}}/auth/dev/verify-email
 Content-Type: application/json
 
 {
-  "email": "devpeternjoroge@gmail.com"
+  "email": "johnbrian24v@gmail.com"
 }
 
 ### change role
