@@ -11,7 +11,7 @@ export class ProductResponseDto {
   status?: ProductStatus;
   farmerId?: string | null;
   stallId?: string | null;
-  createdById: string;
+  createdById: string | null;
   images?: ProductImageDto[];
   createdAt?: Date;
   updatedAt?: Date;

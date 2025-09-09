@@ -1,18 +1,56 @@
-@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxZTIyM2UyOC01Y2U0LTQxNjgtOTE4Yy0wZjQwZWRjMDc3Y2IiLCJlbWFpbCI6ImpvaG5icmlhbjI0dkBnbWFpbC5jb20iLCJyb2xlIjoiTUFJTl9BRE1JTiIsImlhdCI6MTc1NTQyMzY1NSwiZXhwIjoxNzU2MDI4NDU1fQ._9mTK4Ohwnz95P999eex1ps3aHunor8Ix04pqpRj8qs
+@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxZTIyM2UyOC01Y2U0LTQxNjgtOTE4Yy0wZjQwZWRjMDc3Y2IiLCJlbWFpbCI6ImpvaG5icmlhbjI0dkBnbWFpbC5jb20iLCJyb2xlIjoiTUFJTl9BRE1JTiIsImlhdCI6MTc1NzMzNjQ0MywiZXhwIjoxNzU3OTQxMjQzfQ.0_bS0URkReAngDjbye4gL5pmgeClcwDnkrEVpetYNSg
 
 
 
 ### Create a product (without image upload)
-POST http://localhost:3000/products/create-product
+POST http://localhost:3000/products
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 {
-  "name": "Fresh Tomatoes",
-  "description": "Organic tomatoes from local farm",
+  "name": "pork meat",
+  "description": "high quality eggs from local farming",
   "price": 200,
   "quantity": 50,
   "isWholesale": false,
-  "stallId": "stall_123",
-  "farmerId": "farmer_456"
+  "stallId": "c28b2b7f-1230-4fc6-bbca-90e7ba1832bc",
+  "farmerId": "5c58be2c-ad8d-430f-aab9-4a73e3f3a8b6"
 }
+
+### find all
+GET http://localhost:3000/products/findALL
+
+### find by id
+GET http://localhost:3000/products/e3e53537-f4d3-4652-a711-662771894274
+
+###find by name
+GET http://localhost:3000/products/name/pork meat
+
+
+### Update product
+PUT http://localhost:3000/products/e3e53537-f4d3-4652-a711-662771894274
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "name": "Fresh potatoes-in-market",
+  "description": "Organic potatoes from local farming - updates description",
+  "price": 240,
+  "quantity": 50,
+  "isWholesale": true,
+  "status": "APPROVED"
+}
+
+### update status
+PATCH http://localhost:3000/products/e3e53537-f4d3-4652-a711-662771894274/status
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "status": "REJECTED"
+}
+
+###delete product
+DELETE http://localhost:3000/products/41dfae40-45ac-4ff7-b031-149329812e7a
+Authorization: Bearer {{access_token}}
+Content-Type: application/json

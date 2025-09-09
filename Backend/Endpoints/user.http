@@ -21,10 +21,10 @@ Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 {
-  "email": "peterjuniordev@gmail.com",
+  "email": "peterjuniordev20@gmail.com",
   "password":"User123",
   "name": "peter",
-  "role": "MAIN_ADMIN"
+  "role": "FARMER"
 }
 
 ### GET ALL USERS
@@ -58,7 +58,7 @@ POST {{baseUrl}}/auth/dev/verify-email
 Content-Type: application/json
 
 {
-  "email": "johnbrian24v@gmail.com"
+  "email": "peterjuniordev20@gmail.com"
 }
 
 ### change role

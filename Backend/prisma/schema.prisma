@@ -67,7 +67,7 @@ model Stall {
 
 model Product {
   id          String        @id @default(uuid()) @db.Uuid
-  name        String        @unique
+  name        String
   description String?
   price       Float
   quantity    Int
@@ -81,14 +81,17 @@ model Product {
   stall   Stall?  @relation(fields: [stallId], references: [id])
   stallId String? @db.Uuid
 
-  createdBy   User   @relation("CreatedProducts", fields: [createdById], references: [id])
-  createdById String @db.Uuid
+  // 👇 Changed: optional relation
+  createdBy   User?   @relation("CreatedProducts", fields: [createdById], references: [id])
+  createdById String? @db.Uuid
 
   images     ProductImage[]
   orderItems OrderItem[]
   cartItems  CartItem[]
 
   createdAt DateTime @default(now())
+
+  @@unique([name, stallId])
 }
 
 model ProductImage {

@@ -3,111 +3,118 @@ import {
     Body,
     Controller,
     Post,
+    Get,
+    Put,
+    Delete,
+    Param,
     UploadedFile,
     UseInterceptors,
     Req,
-    UseGuards
+    UseGuards, Patch, Query
 } from '@nestjs/common';
 import { ProductsService } from "./products.service";
 import { CreateProductDto } from "./Dtos/createproduct.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { UploadApiResponse } from "cloudinary";
-import {JwtAuthGuard} from "../jwt/jwt gurad";
+import { JwtAuthGuard } from "../jwt/jwt gurad";
+import {UpdateProductDto} from "./Dtos/updateproduct.dto";
+import {AuthenticatedRequest} from "../shared/requestinterface";
+import {ProductStatus} from "@prisma/client";
 
 @Controller('products')
 export class ProductsController {
     constructor(private readonly productService: ProductsService) {}
 
-    @Post('upload')
-    @UseInterceptors(FileInterceptor('image'))
-    async uploadImage(@UploadedFile() file: Express.Multer.File) {
-        if (!file) {
-            throw new BadRequestException('No file uploaded');
-        }
-
-        try {
-            const result = await this.productService.uploadToCloudinary(file);
-            return {
-                success: true,
-                message: 'Image uploaded successfully',
-                imageUrl: result.secure_url,
-            };
-        } catch (error) {
-            const message =
-                error instanceof Error ? error.message : JSON.stringify(error);
-            throw new BadRequestException('Failed to upload image: ' + message);
-        }
+    // ✅ Get all products
+    @Get('findALL')
+    async findAll() {
+        return this.productService.findAll();
     }
 
-    @Post('upload-and-create')
-    @UseGuards(JwtAuthGuard) // protect route
+    // ✅ Get product by ID
+    @Get(':id')
+    async findById(@Param('id') id: string) {
+        return this.productService.findById(id);
+    }
+
+    // ✅ Get product by name
+    @Get('name/:name')
+    async findByName(@Param('name') name: string) {
+        return this.productService.findByName(name);
+    }
+
+    // ✅ Create a product (protected)
+    @Post()
+    @UseGuards(JwtAuthGuard)
+    async createProduct(@Body() data: CreateProductDto, @Req() req: any) {
+        return this.productService.createProduct(data, req.user.id);
+    }
+
+    // ✅ Upload product with image (protected)
+    @Post('upload')
+    @UseGuards(JwtAuthGuard)
     @UseInterceptors(FileInterceptor('file'))
     async uploadAndCreateProduct(
         @UploadedFile() file: Express.Multer.File,
         @Body() productData: CreateProductDto,
         @Req() req: any,
     ) {
-        if (!file) {
-            throw new BadRequestException('No file uploaded');
+        if (!file) throw new BadRequestException('No file uploaded');
+
+        const result: Partial<UploadApiResponse> =
+            await this.productService.uploadToCloudinary(file);
+
+        if (!result.secure_url) {
+            throw new Error('Image upload failed');
         }
 
-        try {
-            const result: Partial<UploadApiResponse> =
-                await this.productService.uploadToCloudinary(file);
+        const dataWithImageUrl: CreateProductDto = {
+            ...productData,
+            images: [result.secure_url],
+        };
 
-            if (!result.secure_url) {
-                throw new Error('Image upload did not return a secure_url');
-            }
-
-            const dataWithImageUrl: CreateProductDto = {
-                ...productData,
-                images: [result.secure_url],
-            };
-
-            // ✅ Use logged in user's ID
-            const createdById = req.user.id;
-
-            return await this.productService.createProduct(dataWithImageUrl, createdById);
-        } catch (error) {
-            const message =
-                error instanceof Error ? error.message : JSON.stringify(error);
-            throw new BadRequestException('Failed to create product: ' + message);
-        }
+        return this.productService.createProduct(dataWithImageUrl, req.user.id);
     }
 
-    @Post('create-product')
+    // ✅ Update product (protected)
+    @Put(':id')
     @UseGuards(JwtAuthGuard)
-    async createProduct(@Body() data: CreateProductDto, @Req() req: any) {
-        const createdById = req.user.id;
-        return this.productService.createProduct(data, createdById);
+    async update(
+        @Param('id') id: string,
+        @Body() data: UpdateProductDto,
+        @Req() req: AuthenticatedRequest
+    ) {
+        return this.productService.update(id, data, req.user.id);
     }
 
-    @Post('find-all')
-    async findAll() {
-        return this.productService.findAll();
+
+    // ✅ Delete product (protected)
+    @Delete(':id')
+    @UseGuards(JwtAuthGuard)
+    async delete(@Param('id') id: string, @Req() req: any) {
+        return this.productService.delete(id, req.user.id);
     }
 
-    @Post('find-by-name')
-    async findByName(@Body('name') name: string) {
-        return this.productService.findByName(name);
-    }
-    @Post('find-by-id')
-    async findById(@Body('id') id: string) {
-        return this.productService.findOne(id);
-    }
-    @Post('update')
+    @Patch(':id/status')
     @UseGuards(JwtAuthGuard)
-    async update(@Body() data: any, @Req() req: any) {
-        const createdById = req.user.id;
-        return this.productService.update(data.id, data, createdById);
+    async updateStatus(
+        @Param('id') id: string,
+        @Body('status') status: ProductStatus,
+        @Req() req: AuthenticatedRequest
+    ){
+        return this.productService.updateStatus(id, status, req.user.id);
     }
 
-    @Post('delete')
-    @UseGuards(JwtAuthGuard)
-    async delete(@Body() data: any, @Req() req: any) {
-        const createdById = req.user.id;
+    @Get('search')
+    async searchProducts(
+        @Query('q') q: string,
+        @Query('category') category?: string,
+        @Query('minPrice') minPrice?: number,
+        @Query('maxPrice') maxPrice?: number,
+        @Query('page') page: number = 1,
+        @Query('limit') limit: number = 10
+    ) {
+        return this.productService.search(q, category, minPrice, maxPrice, page, limit);
     }
-    @Post('delete-by-id')
-    @UseGuards(JwtAuthGuard)
-    async deleteById(@Body('id') id: string, @Req() req: any) {}
+
 }
