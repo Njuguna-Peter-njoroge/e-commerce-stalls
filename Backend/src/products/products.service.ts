@@ -314,7 +314,7 @@ export class ProductsService {
     return {
       success: true,
       message: `Product status updated to "${status}" successfully`,
-      data: updatedProduct, // ✅ return updated product
+      data: updatedProduct,
     };
   }
   async search(
@@ -331,7 +331,6 @@ export class ProductsService {
       AND: [],
     };
 
-    // 🔎 Search by name/description
     if (q) {
       where.AND.push({
         OR: [
