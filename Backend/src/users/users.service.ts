@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   BadRequestException,
   ForbiddenException,
@@ -184,29 +183,28 @@ export class UsersService {
   // ----------------------------
   // DELETE USER (ADMIN ONLY)
   // ----------------------------
- async deleteUser(adminId: string, targetUserId: string) {
-  // 1. Fetch the user FIRST so you have their details for the message
-  const userToDelete = await this.prisma.user.findUnique({ 
-    where: { id: targetUserId } 
-  });
+  async deleteUser(adminId: string, targetUserId: string) {
+    // 1. Fetch the user FIRST so you have their details for the message
+    const userToDelete = await this.prisma.user.findUnique({
+      where: { id: targetUserId },
+    });
 
-  // 2. If the user doesn't exist, stop here
-  if (!userToDelete) {
-    throw new NotFoundException('User not found');
+    // 2. If the user doesn't exist, stop here
+    if (!userToDelete) {
+      throw new NotFoundException('User not found');
+    }
+
+    // 3. Perform the deletion
+    await this.prisma.user.delete({
+      where: { id: targetUserId },
+    });
+
+    // 4. Now 'userToDelete' is defined and can be used in your message
+    return {
+      success: true,
+      message: `User ${userToDelete.name || userToDelete.email} has been deleted successfully`,
+      deletedId: targetUserId,
+      statusCode: 200,
+    };
   }
-
-  // 3. Perform the deletion
-  await this.prisma.user.delete({
-    where: { id: targetUserId },
-  });
-
-  // 4. Now 'userToDelete' is defined and can be used in your message
-  return {
-    success: true,
-    message: `User ${userToDelete.name || userToDelete.email} has been deleted successfully`,
-    deletedId: targetUserId,
-    statusCode: 200,
-  };
-}
-
 }
