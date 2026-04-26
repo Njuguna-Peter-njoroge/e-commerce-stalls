@@ -1,7 +1,8 @@
 
 @baseUrl = http://localhost:3000
 
-@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzZTc0NzkzMy1hZDk0LTRkZmYtYjkxMy01YmQ5MDc5MTdhNWQiLCJlbWFpbCI6Im5qdWd1bmFocGV0ZXJuam9yb2dlQGdtYWlsLmNvbSIsInJvbGUiOiJNQUlOX0FETUlOIiwiaWF0IjoxNzU1MDY0MTMyLCJleHAiOjE3NTU2Njg5MzJ9.xDkkK6jq76abQ5wxxx6lonzQ-zzGmfyGA_N6-fDnECo
+
+@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxZTIyM2UyOC01Y2U0LTQxNjgtOTE4Yy0wZjQwZWRjMDc3Y2IiLCJlbWFpbCI6ImpvaG5icmlhbjI0dkBnbWFpbC5jb20iLCJyb2xlIjoiTUFJTl9BRE1JTiIsImlhdCI6MTc3Njk2NzM5NiwiZXhwIjoxNzc3NTcyMTk2fQ.nMF9Rw2vMzQOkuqdyyDX3Plh1sVRkFj3-UoJdGlRjVY
 
 ####create stall
 POST {{baseUrl}}/stall
@@ -21,11 +22,11 @@ Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 ###findOne
-GET http://localhost:3000/stall/04c02986-10fb-4ce6-9140-17dece693542
+GET http://localhost:3000/stall/c28b2b7f-1230-4fc6-bbca-90e7ba1832bc
 Content-Type: application/json
 
 ### Update a Stall (MAIN_ADMIN or STALL_ADMIN only)
-PATCH http://localhost:3000/stall/04c02986-10fb-4ce6-9140-17dece693542
+PATCH http://localhost:3000/stall/c28b2b7f-1230-4fc6-bbca-90e7ba1832bc
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
@@ -37,5 +38,5 @@ Content-Type: application/json
 
 
 ### Delete a Stall (MAIN_ADMIN or STALL_ADMIN only)
-GET http://localhost:3000/stall/54c5380e-49bb-475b-b353-deee4acb002a/delete
+GET http://localhost:3000/stall/39382d75-241d-445c-a6a8-19b2650be4c8/delete
 Authorization: Bearer {{access_token}}

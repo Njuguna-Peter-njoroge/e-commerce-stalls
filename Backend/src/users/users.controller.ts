@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import { RolesGuard } from './../Guards/roleguard';
+import { JwtAuthGuard } from './../Guards/authguard';
 import {
   Body,
   Controller,
@@ -13,8 +16,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Role } from '@prisma/client';
-import { JwtAuthGuard } from '../jwt/jwt gurad';
-import { RolesGuard } from '../Guards/roleguard';
+
 import { Roles } from '../Guards/decortators/roles.decorator';
 import { ChangePasswordDto } from './Dtos/changePassword.dto';
 

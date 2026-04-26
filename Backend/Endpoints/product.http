@@ -1,4 +1,4 @@
-@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxZTIyM2UyOC01Y2U0LTQxNjgtOTE4Yy0wZjQwZWRjMDc3Y2IiLCJlbWFpbCI6ImpvaG5icmlhbjI0dkBnbWFpbC5jb20iLCJyb2xlIjoiTUFJTl9BRE1JTiIsImlhdCI6MTc1NzMzNjQ0MywiZXhwIjoxNzU3OTQxMjQzfQ.0_bS0URkReAngDjbye4gL5pmgeClcwDnkrEVpetYNSg
+@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxZTIyM2UyOC01Y2U0LTQxNjgtOTE4Yy0wZjQwZWRjMDc3Y2IiLCJlbWFpbCI6ImpvaG5icmlhbjI0dkBnbWFpbC5jb20iLCJyb2xlIjoiTUFJTl9BRE1JTiIsImlhdCI6MTc3Njk2NzM5NiwiZXhwIjoxNzc3NTcyMTk2fQ.nMF9Rw2vMzQOkuqdyyDX3Plh1sVRkFj3-UoJdGlRjVY
 
 
 
@@ -8,7 +8,7 @@ Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 {
-  "name": "pork meat",
+  "name": "fresh pork meat",
   "description": "high quality eggs from local farming",
   "price": 200,
   "quantity": 50,
@@ -21,14 +21,13 @@ Authorization: Bearer {{access_token}}
 GET http://localhost:3000/products/findALL
 
 ### find by id
-GET http://localhost:3000/products/e3e53537-f4d3-4652-a711-662771894274
-
+GET http://localhost:3000/products/ece4d94b-b6da-4e29-98e5-3297d960cd5e
 ###find by name
-GET http://localhost:3000/products/name/pork meat
+GET http://localhost:3000/products/name/fresh pork meat
 
 
 ### Update product
-PUT http://localhost:3000/products/e3e53537-f4d3-4652-a711-662771894274
+PUT http://localhost:3000/products/ece4d94b-b6da-4e29-98e5-3297d960cd5e
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
@@ -42,7 +41,7 @@ Content-Type: application/json
 }
 
 ### update status
-PATCH http://localhost:3000/products/e3e53537-f4d3-4652-a711-662771894274/status
+PATCH http://localhost:3000/products/ece4d94b-b6da-4e29-98e5-3297d960cd5e/status
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
@@ -51,6 +50,6 @@ Content-Type: application/json
 }
 
 ###delete product
-DELETE http://localhost:3000/products/41dfae40-45ac-4ff7-b031-149329812e7a
+DELETE http://localhost:3000/products/ece4d94b-b6da-4e29-98e5-3297d960cd5e
 Authorization: Bearer {{access_token}}
 Content-Type: application/json

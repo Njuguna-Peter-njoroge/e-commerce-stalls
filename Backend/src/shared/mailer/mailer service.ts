@@ -3,68 +3,68 @@ import { ConfigService } from '@nestjs/config';
 import { MailerService as NestMailerService } from '@nestjs-modules/mailer';
 
 export interface EmailOptions {
-    to: string;
-    subject: string;
-    template?: string;
-    context?: Record<string, any>;
-    html?: string;
-    text?: string;
+  to: string;
+  subject: string;
+  template?: string;
+  context?: Record<string, any>;
+  html?: string;
+  text?: string;
 }
 
 export interface WelcomeEmailContext {
-    name: string;
-    email: string;
-    companyName?: string;
-    supportEmail?: string;
-    loginUrl?: string;
+  name: string;
+  email: string;
+  companyName?: string;
+  supportEmail?: string;
+  loginUrl?: string;
 }
 
 @Injectable()
 export class CustomMailerService {
-    private readonly logger = new Logger(CustomMailerService.name);
+  private readonly logger = new Logger(CustomMailerService.name);
 
-    constructor(
-        private mailerService: NestMailerService,
-        private configService: ConfigService,
-    ) {}
+  constructor(
+    private mailerService: NestMailerService,
+    private configService: ConfigService,
+  ) {}
 
-    async sendEmail(options: EmailOptions): Promise<void> {
-        try {
-            const mailOptions: any = {
-                to: options.to,
-                subject: options.subject,
-            };
+  async sendEmail(options: EmailOptions): Promise<void> {
+    try {
+      const mailOptions: any = {
+        to: options.to,
+        subject: options.subject,
+      };
 
-            if (options.template && options.context) {
-                mailOptions.template = options.template;
-                mailOptions.context = options.context;
-            } else if (options.html) {
-                mailOptions.html = options.html;
-            } else if (options.text) {
-                mailOptions.text = options.text;
-            }
+      if (options.template && options.context) {
+        mailOptions.template = options.template;
+        mailOptions.context = options.context;
+      } else if (options.html) {
+        mailOptions.html = options.html;
+      } else if (options.text) {
+        mailOptions.text = options.text;
+      }
 
-            const result = await this.mailerService.sendMail(mailOptions);
-            this.logger.log(
-                `Email sent successfully to ${options.to}: ${result.messageId}`,
-            );
-        } catch (error) {
-            this.logger.error(
-                `Failed to send email to ${options.to}: ${error.message}`,
-            );
-            throw error;
-        }
+      const result = await this.mailerService.sendMail(mailOptions);
+      this.logger.log(
+        `Email sent successfully to ${options.to}: ${result.messageId}`,
+      );
+    } catch (error) {
+      this.logger.error(
+        `Failed to send email to ${options.to}: ${error.message}`,
+      );
+      throw error;
     }
+  }
 
-    async sendWelcomeEmail(
-        email: string,
-        name: string,
-        otpCode: string,
-    ): Promise<void> {
-        const baseUrl =
-            this.configService.get<string>('FRONTEND_URL') || 'http://localhost:3000';
+  async sendWelcomeEmail(
+    email: string,
+    name: string,
+    otpCode: string,
+  ): Promise<void> {
+    const baseUrl =
+      this.configService.get<string>('FRONTEND_URL') || 'http://localhost:3000';
 
-        const htmlContent = `
+    const htmlContent = `
             <!DOCTYPE html>
             <html>
             <head>
@@ -110,21 +110,21 @@ export class CustomMailerService {
             </html>
         `;
 
-        await this.sendEmail({
-            to: email,
-            subject: 'Welcome to Courier services- Verify Your Email',
-            html: htmlContent,
-        });
-    }
+    await this.sendEmail({
+      to: email,
+      subject: 'Welcome to Courier services- Verify Your Email',
+      html: htmlContent,
+    });
+  }
 
-    async sendPasswordResetEmail(
-        email: string,
-        name: string,
-        otpCode: string,
-    ): Promise<void> {
-        const baseUrl =
-            this.configService.get<string>('FRONTEND_URL') || 'http://localhost:3000';
-        const htmlContent = `
+  async sendPasswordResetEmail(
+    email: string,
+    name: string,
+    otpCode: string,
+  ): Promise<void> {
+    const baseUrl =
+      this.configService.get<string>('FRONTEND_URL') || 'http://localhost:3000';
+    const htmlContent = `
             <!DOCTYPE html>
             <html>
             <head>
@@ -168,21 +168,21 @@ export class CustomMailerService {
             </body>
             </html>
         `;
-        await this.sendEmail({
-            to: email,
-            subject: 'Password Reset - Courier services',
-            html: htmlContent,
-        });
-    }
+    await this.sendEmail({
+      to: email,
+      subject: 'Password Reset - Courier services',
+      html: htmlContent,
+    });
+  }
 
-    async sendEmailVerification(
-        email: string,
-        name: string,
-        otpCode: string,
-    ): Promise<void> {
-        const baseUrl =
-            this.configService.get<string>('FRONTEND_URL') || 'http://localhost:3000';
-        const htmlContent = `
+  async sendEmailVerification(
+    email: string,
+    name: string,
+    otpCode: string,
+  ): Promise<void> {
+    const baseUrl =
+      this.configService.get<string>('FRONTEND_URL') || 'http://localhost:3000';
+    const htmlContent = `
             <!DOCTYPE html>
             <html>
             <head>
@@ -226,21 +226,21 @@ export class CustomMailerService {
             </body>
             </html>
         `;
-        await this.sendEmail({
-            to: email,
-            subject: 'Email Verification - Courier services',
-            html: htmlContent,
-        });
-    }
+    await this.sendEmail({
+      to: email,
+      subject: 'Email Verification - Courier services',
+      html: htmlContent,
+    });
+  }
 
-    async sendCourseEnrollmentEmail(
-        email: string,
-        name: string,
-        courseName: string,
-    ): Promise<void> {
-        const baseUrl =
-            this.configService.get<string>('FRONTEND_URL') || 'http://localhost:3000';
-        const htmlContent = `
+  async sendCourseEnrollmentEmail(
+    email: string,
+    name: string,
+    courseName: string,
+  ): Promise<void> {
+    const baseUrl =
+      this.configService.get<string>('FRONTEND_URL') || 'http://localhost:3000';
+    const htmlContent = `
             <!DOCTYPE html>
             <html>
             <head>
@@ -277,21 +277,21 @@ export class CustomMailerService {
             </body>
             </html>
         `;
-        await this.sendEmail({
-            to: email,
-            subject: `Parcel  - ${courseName}`,
-            html: htmlContent,
-        });
-    }
+    await this.sendEmail({
+      to: email,
+      subject: `Parcel  - ${courseName}`,
+      html: htmlContent,
+    });
+  }
 
-    async sendCourseCompletionEmail(
-        email: string,
-        name: string,
-        courseName: string,
-    ): Promise<void> {
-        const baseUrl =
-            this.configService.get<string>('FRONTEND_URL') || 'http://localhost:3000';
-        const htmlContent = `
+  async sendCourseCompletionEmail(
+    email: string,
+    name: string,
+    courseName: string,
+  ): Promise<void> {
+    const baseUrl =
+      this.configService.get<string>('FRONTEND_URL') || 'http://localhost:3000';
+    const htmlContent = `
             <!DOCTYPE html>
             <html>
             <head>
@@ -329,10 +329,10 @@ export class CustomMailerService {
             </body>
             </html>
         `;
-        await this.sendEmail({
-            to: email,
-            subject: `Course Completion - ${courseName}`,
-            html: htmlContent,
-        });
-    }
+    await this.sendEmail({
+      to: email,
+      subject: `Course Completion - ${courseName}`,
+      html: htmlContent,
+    });
+  }
 }

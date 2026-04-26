@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   BadRequestException,
   ForbiddenException,
@@ -174,20 +175,38 @@ export class UsersService {
     });
 
     const { password, ...result } = updated;
-    return result;
+    return {
+      message: 'password updated successfully',
+      user: result,
+    };
   }
 
   // ----------------------------
   // DELETE USER (ADMIN ONLY)
   // ----------------------------
-  async deleteUser(adminId: string, targetUserId: string) {
-    const admin = await this.prisma.user.findUnique({ where: { id: adminId } });
-    if (!admin || admin.role !== Role.MAIN_ADMIN) {
-      throw new ForbiddenException('Only MAIN_ADMIN can delete users');
-    }
+ async deleteUser(adminId: string, targetUserId: string) {
+  // 1. Fetch the user FIRST so you have their details for the message
+  const userToDelete = await this.prisma.user.findUnique({ 
+    where: { id: targetUserId } 
+  });
 
-    return this.prisma.user.delete({
-      where: { id: targetUserId },
-    });
+  // 2. If the user doesn't exist, stop here
+  if (!userToDelete) {
+    throw new NotFoundException('User not found');
   }
+
+  // 3. Perform the deletion
+  await this.prisma.user.delete({
+    where: { id: targetUserId },
+  });
+
+  // 4. Now 'userToDelete' is defined and can be used in your message
+  return {
+    success: true,
+    message: `User ${userToDelete.name || userToDelete.email} has been deleted successfully`,
+    deletedId: targetUserId,
+    statusCode: 200,
+  };
+}
+
 }

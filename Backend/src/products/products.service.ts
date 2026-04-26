@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import {
@@ -10,8 +11,8 @@ import { CreateProductDto } from './Dtos/createproduct.dto';
 import { ProductStatus } from '@prisma/client';
 import { ApiResponse } from '../shared/apiResponse';
 import { ProductResponseDto } from './Dtos/productResponseDto';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { v2 as cloudinary } from 'cloudinary';
+import { Prisma } from '@prisma/client';
 import * as streamifier from 'streamifier';
 import { UpdateProductDto } from './Dtos/updateproduct.dto';
 import { response } from 'express';
@@ -112,12 +113,13 @@ export class ProductsService {
           farmerId: product.farmerId,
           createdById: product.createdById,
           createdAt: product.createdAt,
+
           updatedAt: product.updatedAt,
         })),
       };
     } catch (error) {
       throw new BadRequestException(
-        error instanceof PrismaClientKnownRequestError
+        error instanceof Prisma.PrismaClientKnownRequestError
           ? error.message
           : 'Something went wrong',
       );
@@ -236,7 +238,7 @@ export class ProductsService {
       };
     } catch (error) {
       throw new BadRequestException(
-        error instanceof PrismaClientKnownRequestError
+        error instanceof Prisma.PrismaClientKnownRequestError
           ? error.message
           : 'Something went wrong',
       );
@@ -281,7 +283,7 @@ export class ProductsService {
       };
     } catch (error) {
       throw new BadRequestException(
-        error instanceof PrismaClientKnownRequestError
+        error instanceof Prisma.PrismaClientKnownRequestError
           ? error.message
           : 'Something went wrong',
       );

@@ -1,17 +1,17 @@
+/* eslint-disable @typescript-eslint/require-await */
 import { Module } from '@nestjs/common';
-import {JwtModule, JwtService} from '@nestjs/jwt';
+import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import {PrismaModule} from "../prisma/prisma.module";
-import {MailerModule} from "../shared/mailer/mailer module";
-import {JwtAuthGuard} from "../jwt/jwt gurad";
-import {CustomMailerService} from "../shared/mailer/mailer service";
-import {CustomJwtService} from "../jwt/jwt service";
-import {CustomJwtModule} from "../custom jwt/custon-jwt.module";
-import {JWTStrategy} from "../strategy/strategy";
-import {RolesGuard} from "../Guards/roleguard";
-
+import { PrismaModule } from '../prisma/prisma.module';
+import { MailerModule } from '../shared/mailer/mailer module';
+import { JwtAuthGuard } from '../jwt/jwt gurad';
+import { CustomMailerService } from '../shared/mailer/mailer service';
+import { CustomJwtService } from '../jwt/jwt service';
+import { CustomJwtModule } from '../custom jwt/custon-jwt.module';
+import { JWTStrategy } from '../strategy/strategy';
+import { RolesGuard } from '../Guards/roleguard';
 
 @Module({
   imports: [
@@ -29,8 +29,14 @@ import {RolesGuard} from "../Guards/roleguard";
     CustomJwtModule,
   ],
   controllers: [AuthController],
-  providers: [JWTStrategy, JwtAuthGuard, RolesGuard, CustomMailerService,AuthService],
-  exports: [JwtModule, JwtAuthGuard, RolesGuard,AuthService],
-
+  providers: [
+    JWTStrategy,
+    JwtAuthGuard,
+    RolesGuard,
+    CustomMailerService,
+    AuthService,
+    CustomJwtService,
+  ],
+  exports: [JwtModule, JwtAuthGuard, RolesGuard, AuthService, CustomJwtService],
 })
 export class AuthModule {}
